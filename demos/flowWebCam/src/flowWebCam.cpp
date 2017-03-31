@@ -125,7 +125,8 @@ int main(int argc, char** argv) {
 
         imshow("image", frameGray);
         imshow("optical flow", fcolor);
-	
+
+
 	waitKey(3);
         //if(waitKey(1) >= 0) break;
     }

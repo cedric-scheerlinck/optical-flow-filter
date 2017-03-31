@@ -1,5 +1,5 @@
 """
-    flowfilter.gpu.flowfilter
+    flowfilter.gpu.flowfilters
     -------------------------
 
     :copyright: 2015, Juan David Adarve, ANU. See AUTHORS for more details

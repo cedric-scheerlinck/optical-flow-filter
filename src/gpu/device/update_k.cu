@@ -163,6 +163,15 @@ __global__ void deltaFlowUpdate_k(gpuimage_t<float> newImage,
     flowNew.x = max(-maxflow, min(flowNew.x, maxflow));
     flowNew.y = max(-maxflow, min(flowNew.y, maxflow));
 
+    //KILL flow if low image gradient###########################
+    if ((a1.x*a1.x)<0.00001 && (a1.y*a1.y)<0.00001)
+    {
+        // dFlowNew.x =   0;
+        // dFlowNew.y =   0;
+        flowNew.x =   0;
+        flowNew.y =   0;
+    }
+    //##########################################################
 
     //#################################
     // PACK RESULTS

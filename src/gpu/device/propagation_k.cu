@@ -141,7 +141,7 @@ __global__ void flowPropagatePayloadX_k(cudaTextureObject_t inputFlow,
 
     const int height = flowPropagated.height;
     const int width = flowPropagated.width;
-
+    const float border_flow = 0.0;
     // pixel coordinate
     const int2 pix = make_int2(blockIdx.x*blockDim.x + threadIdx.x,
     blockIdx.y*blockDim.y + threadIdx.y);
@@ -172,7 +172,6 @@ __global__ void flowPropagatePayloadX_k(cudaTextureObject_t inputFlow,
 
     // propagation in X
     float2 flowPropU = flow_0;
-    if(scalarPayload > 1){
 
     flowPropU.x -= dt*Ud* (Ud >= 0.0f? ux_m : ux_p);
     flowPropU.y -= dt*Ud* (Ud >= 0.0f? vx_m : vx_p);
@@ -207,7 +206,6 @@ __global__ void flowPropagatePayloadX_k(cudaTextureObject_t inputFlow,
     float2 loadProp2 = load2_0;
     loadProp2.x -= dt*Ud* (Ud >= 0.0f? lx2_m.x : lx2_p.x);
     loadProp2.y -= dt*Ud* (Ud >= 0.0f? lx2_m.y : lx2_p.y);
-    }
 
     //#################################
     // BORDER REMOVAL
@@ -217,13 +215,13 @@ __global__ void flowPropagatePayloadX_k(cudaTextureObject_t inputFlow,
 
     // if the pixel coordinate lies on the image border,
     // take the original value of flow (flow_0) as the propagated flow
-    flowPropU.x = inRange? flowPropU.x : flow_0.x;
-    flowPropU.y = inRange? flowPropU.y : flow_0.y;
+    flowPropU.x = inRange?  flowPropU.x:flow_0.x;
+    flowPropU.y = inRange? flowPropU.y:flow_0.y;
 
-    loadProp1 = inRange? loadProp1 : load1_0;
+    loadProp1 = inRange? loadProp1:load1_0;
 
-    loadProp2.x = inRange? loadProp2.x : load2_0.x;
-    loadProp2.y = inRange? loadProp2.y : load2_0.y;
+    loadProp2.x = inRange? loadProp2.x:load2_0.x;
+    loadProp2.y = inRange? loadProp2.y:load2_0.y;
 
     //#################################
     // PACK RESULTS
@@ -244,7 +242,7 @@ __global__ void flowPropagatePayloadY_k(cudaTextureObject_t inputFlow,
 
     const int height = flowPropagated.height;
     const int width = flowPropagated.width;
-
+    const float border_flow = 0.00;
     // pixel coordinate
     const int2 pix = make_int2(blockIdx.x*blockDim.x + threadIdx.x,
     blockIdx.y*blockDim.y + threadIdx.y);
@@ -277,6 +275,7 @@ __global__ void flowPropagatePayloadY_k(cudaTextureObject_t inputFlow,
     float2 flowPropV = flow_0;
     flowPropV.x -= dt*Vd* (Vd >= 0.0f? uy_m : uy_p);
     flowPropV.y -= dt*Vd* (Vd >= 0.0f? vy_m : vy_p);
+
 
 
     //#################################
@@ -318,13 +317,13 @@ __global__ void flowPropagatePayloadY_k(cudaTextureObject_t inputFlow,
 
     // if the pixel coordinate lies on the image border,
     // take the original value of flow (flow_0) as the propagated flow
-    flowPropV.x = inRange? flowPropV.x : flow_0.x;
-    flowPropV.y = inRange? flowPropV.y : flow_0.y;
+    flowPropV.x = inRange? flowPropV.x:flow_0.x;
+    flowPropV.y = inRange? flowPropV.y:flow_0.y;
 
-    loadProp1 = inRange? loadProp1 : load1_0;
+    loadProp1 = inRange? loadProp1:load1_0;
 
-    loadProp2.x = inRange? loadProp2.x : load2_0.x;
-    loadProp2.y = inRange? loadProp2.y : load2_0.y;
+    loadProp2.x = inRange? loadProp2.x:load2_0.x;
+    loadProp2.y = inRange? loadProp2.y:load2_0.y;
 
 
     //#################################

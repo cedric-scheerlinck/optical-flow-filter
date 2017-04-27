@@ -172,6 +172,8 @@ __global__ void flowPropagatePayloadX_k(cudaTextureObject_t inputFlow,
 
     // propagation in X
     float2 flowPropU = flow_0;
+    if(scalarPayload > 1){
+
     flowPropU.x -= dt*Ud* (Ud >= 0.0f? ux_m : ux_p);
     flowPropU.y -= dt*Ud* (Ud >= 0.0f? vx_m : vx_p);
 
@@ -205,7 +207,7 @@ __global__ void flowPropagatePayloadX_k(cudaTextureObject_t inputFlow,
     float2 loadProp2 = load2_0;
     loadProp2.x -= dt*Ud* (Ud >= 0.0f? lx2_m.x : lx2_p.x);
     loadProp2.y -= dt*Ud* (Ud >= 0.0f? lx2_m.y : lx2_p.y);
-
+    }
 
     //#################################
     // BORDER REMOVAL

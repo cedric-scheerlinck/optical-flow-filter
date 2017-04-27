@@ -92,6 +92,7 @@ __global__ void deltaFlowUpdate_k(gpuimage_t<float> newImage,
 
     const int height = flowUpdated.height;
     const int width = flowUpdated.width;
+    const float grad_thresh = 0.000005;
 
     // pixel coordinate
     const int2 pix = make_int2(blockIdx.x*blockDim.x + threadIdx.x,
@@ -164,7 +165,7 @@ __global__ void deltaFlowUpdate_k(gpuimage_t<float> newImage,
     flowNew.y = max(-maxflow, min(flowNew.y, maxflow));
 
     //KILL flow if low image gradient###########################
-    if ((a1.x*a1.x)<0.00001 && (a1.y*a1.y)<0.00001)
+    if ((a1.x*a1.x)<grad_thresh && (a1.y*a1.y)<grad_thresh)
     {
         // dFlowNew.x =   0;
         // dFlowNew.y =   0;
